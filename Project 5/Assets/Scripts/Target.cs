@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
+    // Variables
+
     private Rigidbody targetRb;
     private float minSpeed = 12;
     private float maxSpeed = 16;
@@ -17,10 +19,12 @@ public class Target : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Instantiates variables
         gameManager = GameObject.Find("Game Manager")
             .GetComponent<GameManager>();
         targetRb = GetComponent<Rigidbody>();
 
+        // For every target instantiated, rotation and position  
         targetRb.AddForce(RandomForce(), ForceMode.Impulse);
         targetRb.AddTorque(RandomTorque(), RandomTorque(),
             RandomTorque(), ForceMode.Impulse);
@@ -33,19 +37,31 @@ public class Target : MonoBehaviour
 
     }
 
+
+    // When target is clicked, destroys and updates score
     private void OnMouseDown()
     {
-        Destroy(gameObject);
-        Instantiate(explostionParticle, transform.position,
-            explostionParticle.transform.rotation);
-        gameManager.UpdateScore(pointValue);
+        if (gameManager.isGameActive)
+        {
+            Destroy(gameObject);
+            Instantiate(explostionParticle, transform.position,
+                explostionParticle.transform.rotation);
+            gameManager.UpdateScore(pointValue);
+        }
+       
     }
 
+    // When target falls, it gets destroyed
     private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
+        if (!gameObject.CompareTag("Bad"))
+        {
+            gameManager.GameOver();
+        }
     }
 
+    // Sets position, rotation, and force
     Vector3 RandomForce()
     {
         return Vector3.up * Random.Range(minSpeed, maxSpeed);
