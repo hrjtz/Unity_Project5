@@ -21,7 +21,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        titleScreen.gameObject.SetActive(true);
+        scoreText.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -65,6 +66,7 @@ public class GameManager : MonoBehaviour
     public void StartGame(int difficulty)
     {
         titleScreen.gameObject.SetActive(false);
+        scoreText.gameObject.SetActive(true);
         isGameActive = true;
         StartCoroutine(SpawnTarget());
         score = 0;
